@@ -24,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
     <Folder Include="Models\Chat\" />
     <Folder Include="Models\Message\" />
     <Folder Include="Models\Report\" />

@@ -33,8 +33,6 @@ namespace DTOs.Auth
         [DefaultValue(false)]
         public bool IsBan { get; set; }
 
-        public string RefreshToken { get; set; } = default!;
-
         [DefaultValue("LOCAL")]
         public string AccountType { get; set; } = default!;
 
