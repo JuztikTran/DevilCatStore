@@ -1,7 +1,9 @@
 ﻿using DTOs.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StoreService.IServices.Auth;
+using StoreService.IServices.Utils;
 
 namespace StoreService.Controllers
 {
@@ -16,7 +18,9 @@ namespace StoreService.Controllers
             this.authService = service;
         }
 
+        
         [HttpPost("sign-in")]
+        [AllowAnonymous]
         public async Task<IActionResult> SignIn([FromBody] DTOSignIn request)
         {
             if (!ModelState.IsValid)
@@ -31,11 +35,12 @@ namespace StoreService.Controllers
             }
             else
             {
-                return BadRequest(respone);
+                return Unauthorized(respone);
             }
         }
 
         [HttpPost("sign-up")]
+        [AllowAnonymous]
         public async Task<IActionResult> SignUp([FromBody] DTOSignUp request)
         {
             if (!ModelState.IsValid)

@@ -23,7 +23,7 @@ namespace StoreService.Models.User
         [DefaultValue(Gender.Unknow)]
         public Gender Gender { get; set; }
 
-        [Column(TypeName = "datetime2(7)")]
+        [Column(TypeName = "DATE")]
         public DateOnly DateOfBirth { get; set; }
     }
 }

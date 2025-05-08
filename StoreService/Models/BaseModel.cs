@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StoreService.Models
 {
@@ -8,8 +9,11 @@ namespace StoreService.Models
     {
         [Key]
         public string ID { get; set; } = new Guid().ToString("N");
-        public DateTime CreateAt { get; set; }
-        public DateTime UpdateAt { get; set; }
+
+        [Column(TypeName = "TIMESTAMP")]
+        public DateTime CreateAt { get; set; } = DateTime.Now;
+        [Column(TypeName = "TIMESTAMP")]
+        public DateTime UpdateAt { get; set; } = DateTime.Now;
     }
 
     public enum Role

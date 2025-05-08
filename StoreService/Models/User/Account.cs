@@ -15,14 +15,16 @@ namespace StoreService.Models.User
         public required string Password { get; set; }
 
         [DefaultValue(false)]
+        [Column(TypeName = "BOOLEAN")]
         public bool IsBan { get; set; }
 
-        public string RefreshToken { get; set; } = default!;
+        public string? RefreshToken { get; set; }
 
         [DefaultValue("LOCAL")]
-        public string AccountType { get; set; } = default!;
+        public string? AccountType { get; set; }
 
         [DefaultValue(Role.USER)]
+        [Column(TypeName = "INTEGER")]
         public required Role Role { get; set; }
 
         [Required]
@@ -31,10 +33,6 @@ namespace StoreService.Models.User
 
         [DefaultValue(false)]
         public bool IsActive { get; set; }
-
-        public string ProfileID { get; set; } = default!;
-        [ForeignKey(nameof(ProfileID))]
-        public virtual Profile Profile { get; set; }
 
         public virtual ICollection<Address> Addresses { get; set; }
     }

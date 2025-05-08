@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualBasic;
 using StoreService.Data;
 using StoreService.IServices.Auth;
+using StoreService.IServices.Utils;
 using StoreService.Models;
 using StoreService.Models.User;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,12 +19,13 @@ namespace StoreService.Services.Auth
     {
         private readonly UserDBContext userDBContext;
         private readonly IConfiguration _configuration;
+        private ITokenService _tokenService;
 
-
-        public AuthService(UserDBContext context, IConfiguration configuration)
+        public AuthService(UserDBContext context, IConfiguration configuration, ITokenService tokenService)
         {
             this.userDBContext = context;
             this._configuration = configuration;
+            this._tokenService = tokenService;
         }
         public Task<DTORespone> ForgotPassword(DTOForgotPassword request)
         {
@@ -62,7 +64,7 @@ namespace StoreService.Services.Auth
                 return new DTORespone
                 {
                     IsSuccess = true,
-                    Message = CreateToken(account.UserName).ToString()!
+                    Message = _tokenService.Authenticate(account).ToString()!
                 };
             }
             catch (Exception e)
@@ -143,34 +145,6 @@ namespace StoreService.Services.Auth
                 };
             }
             
-        }
-
-        private DTOToken CreateToken(string username)
-        {
-            var jwtSettings = _configuration.GetSection("Jwt");
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]!));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expiration = DateTime.UtcNow.AddDays(3); // Token có hiệu lực 3 ngày
-
-            var claims = new[]
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, username),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
-
-            var token = new JwtSecurityToken(
-                issuer: jwtSettings["Issuer"],
-                audience: jwtSettings["Audience"],
-                claims: claims,
-                expires: expiration,
-                signingCredentials: creds
-            );
-
-            return new DTOToken
-            {
-                Token = new JwtSecurityTokenHandler().WriteToken(token),
-                DateOfExpire = expiration
-            };
         }
 
     }

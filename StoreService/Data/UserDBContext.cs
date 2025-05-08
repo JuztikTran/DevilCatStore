@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.OData.Edm;
 using StoreService.Models.User;
 
 namespace StoreService.Data
