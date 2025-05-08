@@ -1,0 +1,53 @@
+networks:
+  backend:
+    driver: bridge   
+
+volumes:
+  pgadmin:    
+  userdb:
+
+services:
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@devilcat.store}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+       - pgadmin:/var/lib/pgadmin
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    networks:
+      - backend
+    restart: unless-stopped
+
+  userdata:
+    container_name: user_db
+    image: postgres
+    ports:
+      - 5432:5432
+    networks:
+      - backend
+    environment:
+      - POSTGRES_DB=userdb
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin@123
+    volumes:
+      - userdb:/var/lib/postgresql/data
+
+  storeservice:
+    container_name: store_service
+    image: ${DOCKER_REGISTRY-}storeservice
+    build:
+      context: .
+      dockerfile: StoreService/Dockerfile
+    ports:
+      - "8000:8080"
+      - "8001:8081"
+    networks:
+      - backend
+    depends_on:
+      - userdata
+    environment:
+      - UserDb=Host=userdata;Port=5432;Database=userdb;Username=admin;Password=admin@123;
