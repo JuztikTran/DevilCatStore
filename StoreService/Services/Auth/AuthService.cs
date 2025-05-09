@@ -1,5 +1,6 @@
 ﻿using DTOs;
 using DTOs.Auth;
+using DTOs.User;
 using Microsoft.EntityFrameworkCore;
 using StoreService.Data;
 using StoreService.IServices.Auth;
@@ -137,17 +138,19 @@ namespace StoreService.Services.Auth
                 userDBContext.Accounts.Add(acc);
                 await userDBContext.SaveChangesAsync();
 
-                var profile = new Profile
+                var profile = new DTOProfile
                 {
                     AccountID = acc.ID,
                     FirstName = request.FirstName,
                     LastName = request.LastName,
                     DateOfBirth = request.DateOfBirth,
-                    Gender = (Models.Gender)request.Gender,
+                    Gender = request.Gender,
                     AvatarURI = request.AvatarURI
                 };
 
-                await userService.CreateProfile(profile);
+                var rs = await userService.CreateProfile(profile);
+
+                if (!rs.IsSuccess) throw new Exception(rs.Message);
 
                 return new DTORespone
                 {
