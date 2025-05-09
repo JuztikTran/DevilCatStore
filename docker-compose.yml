@@ -43,11 +43,26 @@ services:
       context: .
       dockerfile: StoreService/Dockerfile
     ports:
-      - "8000:8080"
-      - "8001:8081"
+      - "8001:8080"
+      - "8000:8081"
     networks:
       - backend
     depends_on:
       - userdata
     environment:
       - UserDb=Host=userdata;Port=5432;Database=userdb;Username=admin;Password=admin@123;
+
+  storeclient:
+    container_name: store_client
+    image: ${DOCKER_REGISTRY-}storeclient
+    build:
+      context: .
+      dockerfile: StoreClient/Dockerfile
+    ports:
+      - "3001:8080"
+      - "3000:8081"
+    networks:
+      - backend
+    environment:
+      - APIserivce=https://localhost:8000
+
