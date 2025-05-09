@@ -1,35 +1,59 @@
 ﻿using DTOs;
 using DTOs.Auth;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.VisualBasic;
 using StoreService.Data;
 using StoreService.IServices.Auth;
+using StoreService.IServices.User;
 using StoreService.IServices.Utils;
-using StoreService.Models;
 using StoreService.Models.User;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace StoreService.Services.Auth
 {
     public class AuthService : IAuthService
     {
-        private readonly UserDBContext userDBContext;
-        private readonly IConfiguration _configuration;
+        private UserDBContext userDBContext;
         private ITokenService _tokenService;
+        private IUserService userService;
 
-        public AuthService(UserDBContext context, IConfiguration configuration, ITokenService tokenService)
+        public AuthService(UserDBContext context, ITokenService tokenService, IUserService userService)
         {
             this.userDBContext = context;
-            this._configuration = configuration;
             this._tokenService = tokenService;
+            this.userService = userService;
         }
-        public Task<DTORespone> ForgotPassword(DTOForgotPassword request)
+
+        public Task<DTORespone> DeleteAccount(string accountID)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<DTORespone> ForgotPassword(DTOForgotPassword request)
+        {
+            if (request == null)
+            {
+                return new DTORespone { IsSuccess = false, Message = "Invalid data request." };
+            }
+
+            try
+            {
+                var account = await this.userDBContext.Accounts
+                                        .FirstOrDefaultAsync(a => a.UserName.Equals(request.UserName));
+
+                if (account == null) return new DTORespone { IsSuccess = false, Message = "Account does not exit" };
+
+                account.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
+                account.UpdateAt = DateTime.Now;
+
+                userDBContext.Accounts.Update(account);
+                await this.userDBContext.SaveChangesAsync();
+
+                return new DTORespone { IsSuccess = true, Message = "Update password success!" };
+            }
+            catch (Exception e)
+            {
+                return new DTORespone { IsSuccess = false, Message = e.Message };
+            }
+
         }
 
         public async Task<DTORespone> SignIn(DTOSignIn request)
@@ -74,7 +98,7 @@ namespace StoreService.Services.Auth
                     IsSuccess = false,
                     Message = e.Message
                 };
-            }            
+            }
         }
 
         public async Task<DTORespone> SignUp(DTOSignUp request)
@@ -107,9 +131,7 @@ namespace StoreService.Services.Auth
                     Role = (Models.Role)request.Role,
                     IsActive = request.IsActive,
                     IsBan = request.IsBan,
-                    AccountType = request.AccountType,
-                    CreateAt = DateTime.Now,
-                    UpdateAt = DateTime.Now,
+                    AccountType = request.AccountType
                 };
 
                 userDBContext.Accounts.Add(acc);
@@ -122,13 +144,10 @@ namespace StoreService.Services.Auth
                     LastName = request.LastName,
                     DateOfBirth = request.DateOfBirth,
                     Gender = (Models.Gender)request.Gender,
-                    AvatarURI = request.AvatarURI,
-                    CreateAt = DateTime.Now,
-                    UpdateAt = DateTime.Now,
+                    AvatarURI = request.AvatarURI
                 };
 
-                userDBContext.Profiles.Add(profile);
-                await userDBContext.SaveChangesAsync();
+                await userService.CreateProfile(profile);
 
                 return new DTORespone
                 {
@@ -144,7 +163,7 @@ namespace StoreService.Services.Auth
                     Message = e.Message,
                 };
             }
-            
+
         }
 
     }

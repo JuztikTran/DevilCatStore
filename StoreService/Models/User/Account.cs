@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using StoreService.Shared;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -29,6 +30,7 @@ namespace StoreService.Models.User
 
         [Required]
         [EmailAddress]
+        [UniqueEmail]
         public required string Email { get; set; }
 
         [DefaultValue(false)]

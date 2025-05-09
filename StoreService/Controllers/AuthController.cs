@@ -18,7 +18,7 @@ namespace StoreService.Controllers
             this.authService = service;
         }
 
-        
+
         [HttpPost("sign-in")]
         [AllowAnonymous]
         public async Task<IActionResult> SignIn([FromBody] DTOSignIn request)
@@ -29,14 +29,7 @@ namespace StoreService.Controllers
             }
 
             var respone = await authService.SignIn(request);
-            if (respone.IsSuccess)
-            {
-                return Ok(respone);
-            }
-            else
-            {
-                return Unauthorized(respone);
-            }
+            return respone.IsSuccess ? Ok(respone) : Unauthorized(respone);
         }
 
         [HttpPost("sign-up")]
@@ -49,14 +42,20 @@ namespace StoreService.Controllers
             }
 
             var respone = await authService.SignUp(request);
-            if (respone.IsSuccess)
+            return respone.IsSuccess ? Ok(respone) : BadRequest(respone);
+        }
+
+        [HttpPost("forgot-password")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword(DTOForgotPassword request)
+        {
+            if (!ModelState.IsValid)
             {
-                return Ok(respone);
+                return BadRequest();
             }
-            else
-            {
-                return BadRequest(respone);
-            }
+
+            var respone = await authService.ForgotPassword(request);
+            return respone.IsSuccess ? Ok(respone) : BadRequest(respone);
         }
     }
 }
