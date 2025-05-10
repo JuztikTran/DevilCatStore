@@ -22,10 +22,12 @@ namespace StoreService.Models.Product
         public int Quantity { get; set; }
 
         [Range(0, double.MaxValue)]
+        [Column(TypeName = "NUMERIC(3)")]
         public double UnitPrice { get; set; }
 
         [Range(0, 1)]
         [DefaultValue(0)]
+        [Column(TypeName = "NUMERIC(2)")]
         public double Discount { get; set; }
     }
 }

@@ -6,10 +6,13 @@ using Microsoft.OData.ModelBuilder;
 using Microsoft.OpenApi.Models;
 using StoreService.Data;
 using StoreService.IServices.Auth;
+using StoreService.IServices.Products;
 using StoreService.IServices.User;
 using StoreService.IServices.Utils;
+using StoreService.Models.Product;
 using StoreService.Models.User;
 using StoreService.Services.Auth;
+using StoreService.Services.Product;
 using StoreService.Services.User;
 using StoreService.Services.Utils;
 using System.Text;
@@ -18,13 +21,19 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddDbContext<UserDBContext>(options =>
-{
-    options.UseNpgsql(Environment.GetEnvironmentVariable("UserDb"));
-});
+builder.Services.AddDbContext<UserDBContext>(options
+    => options.UseNpgsql(Environment.GetEnvironmentVariable("UserDb")));
+builder.Services.AddDbContext<ProductDBContext>(options
+    => options.UseNpgsql(Environment.GetEnvironmentVariable("ProductDb")));
 
 var odataBuilder = new ODataConventionModelBuilder();
 odataBuilder.EntitySet<Address>("Address");
+odataBuilder.EntitySet<Category>("Category");
+odataBuilder.EntitySet<Product>("Product");
+odataBuilder.EntitySet<ProductImage>("ProductImage");
+odataBuilder.EntitySet<ProductVariant>("ProductVariant");
+odataBuilder.EntitySet<Review>("Review");
+
 builder.Services.AddControllers()
     .AddOData(options => options
         .SetMaxTop(100)
@@ -96,6 +105,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 var app = builder.Build();
 

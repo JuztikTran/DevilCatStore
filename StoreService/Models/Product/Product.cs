@@ -24,15 +24,18 @@ namespace StoreService.Models.Product
 
         [DefaultValue(0)]
         [Range(0, 5)]
+        [Column(TypeName = "NUMERIC(1)")]
         public double Rating { get; set; }
 
 
         [DefaultValue(0)]
         [Range(0, double.MaxValue)]
+        [Column(TypeName = "NUMERIC(3)")]
         public double Price { get; set; }
 
         [DefaultValue(0)]
         [Range(0, 1)]
+        [Column(TypeName = "NUMERIC(2)")]
         public double Discount { get; set; }
 
         [Required]

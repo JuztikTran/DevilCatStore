@@ -5,6 +5,7 @@ networks:
 volumes:
   pgadmin:    
   userdb:
+  productdb:
 
 services:
   pgadmin:
@@ -36,6 +37,20 @@ services:
     volumes:
       - userdb:/var/lib/postgresql/data
 
+  productdata:
+    container_name: product_db
+    image: postgres
+    ports:
+      - 5433:5432
+    networks:
+      - backend
+    environment:
+      - POSTGRES_DB=productdb
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin@123
+    volumes:
+      - productdb:/var/lib/postgresql/data
+
   storeservice:
     container_name: store_service
     image: ${DOCKER_REGISTRY-}storeservice
@@ -51,6 +66,7 @@ services:
       - userdata
     environment:
       - UserDb=Host=userdata;Port=5432;Database=userdb;Username=admin;Password=admin@123;
+      - ProductDb=Host=productdata;Port=5433;Database=productdb;Username=admin;Password=admin@123;
 
   storeclient:
     container_name: store_client

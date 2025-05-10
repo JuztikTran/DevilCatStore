@@ -37,7 +37,6 @@
     <Folder Include="Services\Chat\" />
     <Folder Include="Services\Report\" />
     <Folder Include="Services\Order\" />
-    <Folder Include="Services\Product\" />
   </ItemGroup>
 
   <ItemGroup>
