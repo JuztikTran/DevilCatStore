@@ -74,7 +74,7 @@ namespace StoreService.Controllers
             }
             try
             {
-                if (pid.Equals(request.ID) || pid.IsNullOrEmpty())
+                if (!pid.Equals(request.ID) || pid.IsNullOrEmpty())
                     throw new Exception("Profile id is empty or not match.");
 
                 var respone = await this.userService.UpdateProfile(request);
