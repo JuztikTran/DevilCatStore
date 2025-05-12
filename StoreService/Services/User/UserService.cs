@@ -117,20 +117,7 @@ namespace StoreService.Services.User
 
         public IQueryable<Address> GetAddresses()
         {
-            return userDBContext.Addresses
-                .Select(a => new Address
-                {
-                    ID = a.ID,
-                    Location = a.Location,
-                    PhoneNumber = a.PhoneNumber,
-                    ReceiverName = a.ReceiverName,
-                    Account = a.Account,
-                    AccountId = a.AccountId,
-                    IsDefault = a.IsDefault,
-                    Note = a.Note,
-                    CreateAt = a.CreateAt,
-                    UpdateAt = a.UpdateAt,
-                });
+            return userDBContext.Addresses.AsQueryable();
         }
 
         public async Task<Profile?> GetProfile(string accountID)
@@ -140,19 +127,7 @@ namespace StoreService.Services.User
 
         public IQueryable<Profile> GetProfiles()
         {
-            return this.userDBContext.Profiles
-                .Select(p => new Profile
-                {
-                    ID = p.ID,
-                    AccountID = p.AccountID,
-                    FirstName = p.FirstName,
-                    LastName = p.LastName,
-                    AvatarURI = p.AvatarURI,
-                    DateOfBirth = p.DateOfBirth,
-                    Gender = p.Gender,
-                    CreateAt = p.CreateAt,
-                    UpdateAt = p.UpdateAt,
-                });
+            return this.userDBContext.Profiles.AsQueryable();
         }
 
         public async Task<DTORespone> UpdateAddresses(DTOAddressUpdate request)
