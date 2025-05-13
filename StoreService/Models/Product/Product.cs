@@ -19,7 +19,7 @@ namespace StoreService.Models.Product
         public required string Thumbnail { get; set; }
 
         [Required]
-        [Range(0, int.MaxValue)]    
+        [Range(1, int.MaxValue)]    
         public int Quantity { get; set; }
 
         [DefaultValue(0)]

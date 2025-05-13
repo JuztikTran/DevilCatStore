@@ -33,7 +33,6 @@
     <Folder Include="Models\Chat\" />
     <Folder Include="Models\Message\" />
     <Folder Include="Models\Report\" />
-    <Folder Include="Models\Order\" />
     <Folder Include="Services\Chat\" />
     <Folder Include="Services\Report\" />
     <Folder Include="Services\Order\" />
