@@ -31,7 +31,7 @@
 
   <ItemGroup>
     <Folder Include="Models\Chat\" />
-    <Folder Include="Models\Message\" />
+    <Folder Include="Models\Notify\" />
     <Folder Include="Models\Report\" />
     <Folder Include="Services\Chat\" />
     <Folder Include="Services\Report\" />
