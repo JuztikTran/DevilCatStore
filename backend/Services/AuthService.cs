@@ -60,6 +60,9 @@ namespace backend.Services
                 if (account == null)
                     return new DTORespone { StatusCode = 404, Message = "Account does not exist." };
 
+                if (account.IsBanned)
+                    return new DTORespone { StatusCode = 400, Message = account.Reason };
+
                 if (!BCrypt.Net.BCrypt.Verify(data.Password, account.Password))
                     return new DTORespone { StatusCode = 400, Message = "Incorrect username or password." };
 

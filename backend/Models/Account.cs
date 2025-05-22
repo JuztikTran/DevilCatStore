@@ -34,6 +34,11 @@ namespace backend.Models
         [DefaultValue(false)]
         public bool IsBanned { get; set; }
 
+        public string? Reason { get; set; }
+
+        [DefaultValue(false)]
+        public bool IsActive { get; set; }
+
         public string? GoogleId { get; set; }
 
         public string? FacebookId { get; set; }
