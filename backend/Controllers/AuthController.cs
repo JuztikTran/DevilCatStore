@@ -17,7 +17,7 @@ namespace backend.Controllers
 
         [HttpGet("sign-in")]
         [AllowAnonymous]
-        public async Task<IActionResult> SignIn(DTOSignIn req)
+        public async Task<IActionResult> SignIn([FromBody] DTOSignIn req)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -28,7 +28,7 @@ namespace backend.Controllers
 
         [HttpPost("sign-up")]
         [AllowAnonymous]
-        public async Task<IActionResult> SignUp(DTOSignUp req)
+        public async Task<IActionResult> SignUp([FromBody] DTOSignUp req)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -37,7 +37,7 @@ namespace backend.Controllers
             return StatusCode(statusCode: res.StatusCode, value: res.Message);
         }
 
-        public async Task<IActionResult> ForgotPassword(DTOForgotPassword req)
+        public async Task<IActionResult> ForgotPassword([FromBody] DTOForgotPassword req)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

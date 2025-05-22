@@ -97,6 +97,7 @@ namespace backend.Services
                         Role = data.Role,
                         AccountType = data.AccountType,
                         IsBanned = data.IsBanned,
+                        IsActive = false,
                         CreateAt = DateTime.Now,
                         UpdateAt = DateTime.Now,
                     };
@@ -112,6 +113,7 @@ namespace backend.Services
                         Role = data.GoogleId.IsNullOrEmpty() ? "FACEBOOK" : "GOOGLE",
                         AccountType = data.AccountType,
                         IsBanned = data.IsBanned,
+                        IsActive = !data.GoogleId.IsNullOrEmpty(),
                         CreateAt = DateTime.Now,
                         UpdateAt = DateTime.Now,
                     };
