@@ -11,7 +11,6 @@ namespace backend.Services
     {
         Task<DTORespone> SignIn(DTOSignIn data);
         Task<DTORespone> SignUp(DTOSignUp data);
-
         Task<DTORespone> ForgotPassword(DTOForgotPassword data);
     }
 
