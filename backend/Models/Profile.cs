@@ -7,8 +7,6 @@ namespace backend.Models
     public class Profile
     {
         [Key]
-        [Required]
-        [StringLength(24)]
         public required string ID { get; set; }
 
         [Required]
@@ -18,9 +16,6 @@ namespace backend.Models
         [Required]
         [StringLength(50)]
         public required string LastName { get; set; }
-
-        [Column(TypeName = "date")]
-        public DateTime DOB { get; set; }
 
         [Required]
         [StringLength(25)]

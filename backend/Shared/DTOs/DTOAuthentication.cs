@@ -1,17 +1,22 @@
 ﻿using backend.Shared.Utils;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace backend.Models
+namespace backend.Shared.DTOs
 {
-    public class Account
+    public class DTOSignIn
     {
-        [Key]
-        public required string ID { get; set; }
-
-        [StringLength(24)]
         [Length(6, 24)]
+        public required string UserName { get; set; }
+
+        [Length(8, 32)]
+        public required string Password { get; set; }
+    }
+
+    public class DTOSignUp
+    {
+        [Length(6, 24)]
+        [UniqueUserName]
         public required string UserName { get; set; }
 
         [Required]
@@ -21,6 +26,7 @@ namespace backend.Models
         [Required]
         [StringLength(150)]
         [EmailAddress]
+        [UniqueEmail]
         public required string Email { get; set; }
 
         [DefaultValue("LOCAL")]
@@ -37,11 +43,14 @@ namespace backend.Models
         public string? GoogleId { get; set; }
 
         public string? FacebookId { get; set; }
+    }
 
-        [Column(TypeName = "tim1estamp")]
-        public DateTime CreateAt { get; set; }
+    public class DTOForgotPassword
+    {
+        [Required]
+        public required string UserName{ get; set; }
 
-        [Column(TypeName = "timestamp")]
-        public DateTime UpdateAt { get; set; }
+        [Required]
+        public required string NewPassword { get; set; }
     }
 }
