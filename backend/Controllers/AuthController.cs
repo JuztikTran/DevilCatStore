@@ -37,6 +37,7 @@ namespace backend.Controllers
             return StatusCode(statusCode: res.StatusCode, value: res.Message);
         }
 
+        [HttpPut("forgot-password")]
         public async Task<IActionResult> ForgotPassword([FromBody] DTOForgotPassword req)
         {
             if (!ModelState.IsValid)

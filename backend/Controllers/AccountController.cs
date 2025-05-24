@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace backend.Controllers
 {
-    [Route("api/account")]
+    [Route("odata/account")]
     [ApiController]
     [Authorize]
     public class AccountController : ODataController

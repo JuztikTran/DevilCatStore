@@ -22,7 +22,7 @@ builder.Services.AddControllers()
         .Count()
         .Expand()
         .Select()
-        .AddRouteComponents("api", odataBuilder.GetEdmModel())
+        .AddRouteComponents("odata", odataBuilder.GetEdmModel())
         );
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -80,6 +80,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<ItokenService, TokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
 
 var app = builder.Build();
 
