@@ -1,8 +1,10 @@
 using backend.Data;
+using backend.Models;
 using backend.Services;
 using backend.Shared.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OData;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OData.ModelBuilder;
 using Microsoft.OpenApi.Models;
@@ -11,9 +13,18 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<UserDbContext>();
+builder.Services.AddDbContext<UserDbContext>(
+    options => options.UseNpgsql(builder.Configuration["ConnectionStrings:userDb"]));
+builder.Services.AddDbContext<ProductDbContext>(
+    options => options.UseNpgsql(builder.Configuration["ConnectionStrings:productDb"]));
 
 var odataBuilder = new ODataConventionModelBuilder();
+odataBuilder.EntitySet<Account>("Account");
+odataBuilder.EntitySet<Category>("Category");
+odataBuilder.EntitySet<CategoryItem>("CategoryItem");
+odataBuilder.EntitySet<Product>("Product");
+odataBuilder.EntitySet<ProductImages>("ProductImages");
+odataBuilder.EntitySet<ProductVarriant>("ProductVarriant");
 builder.Services.AddControllers()
     .AddOData(options => options
         .SetMaxTop(100)
@@ -81,6 +92,7 @@ builder.Services.AddScoped<ItokenService, TokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 var app = builder.Build();
 
