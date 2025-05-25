@@ -20,9 +20,9 @@ namespace backend.Controllers
 
         [HttpGet("all")]
         [EnableQuery]
-        public IQueryable GetAll()
+        public ActionResult<IEnumerable<Category>> GetAll()
         {
-            return _service.GetAll();
+            return Ok(_service.GetAll());
         }
 
         [HttpGet("get/{id}")]

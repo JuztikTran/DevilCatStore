@@ -2,12 +2,13 @@
 using backend.Services;
 using backend.Shared.DTOs;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Formatter;
 using Microsoft.AspNetCore.OData.Query;
+using Microsoft.AspNetCore.OData.Routing.Attributes;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 using Microsoft.IdentityModel.Tokens;
-using System.Threading.Tasks;
+using Microsoft.OData.ModelBuilder;
 
 namespace backend.Controllers
 {
@@ -20,11 +21,12 @@ namespace backend.Controllers
 
         public AccountController(IAccountService service) => _service = service;
 
-        [HttpGet("all")]
+        [AllowAnonymous]
+        [HttpGet]
         [EnableQuery]
-        public IQueryable<Account> GetAll()
+        public ActionResult<IEnumerable<Account>> GetAll()
         {
-            return _service.GetAll();
+            return Ok(_service.GetAll());
         }
 
         [HttpGet("get/{id}")]

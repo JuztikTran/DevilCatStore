@@ -34,16 +34,16 @@ namespace backend.Models
         [DefaultValue(false)]
         public bool IsBanned { get; set; }
 
-        public string? Reason { get; set; }
+        public string Reason { get; set; } = default!;
 
         [DefaultValue(false)]
         public bool IsActive { get; set; }
 
-        public string? GoogleId { get; set; }
+        public string GoogleId { get; set; } = default!;
 
-        public string? FacebookId { get; set; }
+        public string FacebookId { get; set; } = default!;
 
-        [Column(TypeName = "tim1estamp")]
+        [Column(TypeName = "timestamp")]
         public DateTime CreateAt { get; set; }
 
         [Column(TypeName = "timestamp")]
