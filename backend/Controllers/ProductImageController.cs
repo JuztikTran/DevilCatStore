@@ -1,4 +1,5 @@
-﻿using backend.Models;
+﻿using backend.Data;
+using backend.Models;
 using backend.Services;
 using backend.Shared.DTOs;
 using Microsoft.AspNetCore.Authorization;
@@ -11,41 +12,33 @@ using System.Threading.Tasks;
 
 namespace backend.Controllers
 {
-    [Route("odata/product")]
+    [Route("odata/product-image")]
     [ApiController]
     [Authorize]
-    public class ProductController : ODataController
+    public class ProductImageController : ODataController
     {
-        private IProductService _service;
-        public ProductController(IProductService service) => _service = service;
+        private IProductImageService _service;
+        public ProductImageController(IProductImageService service) => _service = service;
 
         [HttpGet]
-        [EnableQuery]
         [AllowAnonymous]
-        public ActionResult<IEnumerable<Product>> GetAll()
+        [EnableQuery]
+        public ActionResult<IEnumerable<ProductImages>> GetAll()
         {
             return Ok(_service.GetAll());
         }
 
-        [HttpGet("get/{id}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Get([FromRoute] string id)
-        {
-            var res = await _service.GetOne(id);
-            return res == null ? NotFound() : Ok(res);
-        }
-
         [HttpPost("create")]
-        public async Task<IActionResult> Create([FromBody] DTOProduct product)
+        public async Task<IActionResult> Create([FromBody] ICollection<DTOProductImage> req)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var res = await _service.Create(product);
+            var res = await _service.Create(req);
             return StatusCode(res.StatusCode, res.Message);
         }
 
         [HttpPut("update/{id}")]
-        public async Task<IActionResult> Update([FromRoute] string id, [FromBody] Product req)
+        public async Task<IActionResult> Update([FromRoute] string id, [FromBody] ProductImages req)
         {
             if (!ModelState.IsValid || id.IsNullOrEmpty() || id.ToLower() != req.ID.ToLower())
                 return BadRequest(ModelState);
