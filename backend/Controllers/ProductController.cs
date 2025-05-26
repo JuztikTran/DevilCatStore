@@ -2,26 +2,26 @@
 using backend.Services;
 using backend.Shared.DTOs;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
-using Microsoft.IdentityModel.Tokens;
+using System.Threading.Tasks;
 
 namespace backend.Controllers
 {
-    [Route("odata/category")]
+    [Route("odata/product")]
     [ApiController]
     [Authorize]
-    public class CategoryController : ODataController
+    public class ProductController : ODataController
     {
-        private ICategoryService _service;
-
-        public CategoryController(ICategoryService service) => _service = service;
+        private IProductService _service;
+        public ProductController(IProductService service) => _service = service;
 
         [HttpGet]
         [EnableQuery]
         [AllowAnonymous]
-        public ActionResult<IEnumerable<Category>> GetAll()
+        public ActionResult<IEnumerable<Product>> GetAll()
         {
             return Ok(_service.GetAll());
         }
@@ -35,25 +35,25 @@ namespace backend.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> Create([FromBody] DTOCategory req)
+        public async Task<IActionResult> Create([FromBody] DTOProduct product)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var res = await _service.Create(req);
+            var res = await _service.Create(product);
             return StatusCode(res.StatusCode, res.Message);
         }
 
         [HttpPut("update/{id}")]
-        public async Task<IActionResult> Update([FromRoute] string id, [FromBody] Category req)
+        public async Task<IActionResult> Update([FromRoute] string id, [FromBody] Product req)
         {
-            if (!ModelState.IsValid || id.IsNullOrEmpty() || id != req.ID)
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             var res = await _service.Update(req);
             return StatusCode(res.StatusCode, res.Message);
         }
 
         [HttpDelete("delete")]
-        public async Task<IActionResult> Delete([FromBody] DTODeleteCategory req)
+        public async Task<IActionResult> Delete([FromBody] DTODelete req)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

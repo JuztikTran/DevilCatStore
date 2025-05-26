@@ -56,7 +56,8 @@ namespace backend.Services
                 if (data == null)
                     return new DTORespone { StatusCode = 400, Message = "Invalid data request." };
 
-                var account = await _context.Accounts.FindAsync(data.UserName.ToLower());
+                var account = await _context.Accounts.Where(a => a.UserName.ToLower() == data.UserName.ToLower())
+                    .FirstOrDefaultAsync();
                 if (account == null)
                     return new DTORespone { StatusCode = 404, Message = "Account does not exist." };
 

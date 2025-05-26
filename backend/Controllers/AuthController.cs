@@ -15,7 +15,7 @@ namespace backend.Controllers
 
         public AuthController(IAuthService service) => _service = service;
 
-        [HttpGet("sign-in")]
+        [HttpPost("sign-in")]
         [AllowAnonymous]
         public async Task<IActionResult> SignIn([FromBody] DTOSignIn req)
         {

@@ -35,7 +35,6 @@ builder.Services.AddControllers()
         .Select()
         .EnableQueryFeatures()
         .AddRouteComponents("odata", odataBuilder.GetEdmModel())
-        
         );
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -66,8 +65,8 @@ builder.Services.AddSwaggerGen(options =>
 //// Get configuring JWT from appsettings.json
 var jwtSettings = builder.Configuration.GetSection("JwtConfig");
 var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]!);
-var username = builder.Configuration["Admin:username"] ?? "AdminStore";
-var password = builder.Configuration["Admin:password"] ?? "Admin@123";
+var username = builder.Configuration["Admin:username"];
+var password = builder.Configuration["Admin:password"];
 // Config Authentication with JWT
 builder.Services.AddAuthentication(options =>
 {
@@ -97,6 +96,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 
@@ -115,6 +115,10 @@ using (var scope = app.Services.CreateScope())
 
     context.Database.EnsureCreated();
     DbInitializer.InitUserDb(context, username!, password!);
+
+    var product = service.GetRequiredService<ProductDbContext>();
+    product.Database.EnsureCreated();
+    DbInitializer.InitProductDb(product);
 }
 
 app.UseHttpsRedirection();
@@ -128,7 +132,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.UseEndpoints(endpoints => endpoints.MapControllers());
 
 app.Run();

@@ -21,7 +21,6 @@ namespace backend.Controllers
 
         public AccountController(IAccountService service) => _service = service;
 
-        [AllowAnonymous]
         [HttpGet]
         [EnableQuery]
         public ActionResult<IEnumerable<Account>> GetAll()
