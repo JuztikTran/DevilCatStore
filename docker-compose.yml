@@ -1,51 +1,45 @@
 networks:
-  backend:
+  backend: 
     driver: bridge
 
 volumes:
   pgadmin:    
-  userdb:
-  productdb:
-  orderdb:
-  purchasedb:
+  shopdata:
+  productdata:
+  orderdata:
+  purchasedata:
 
 services:
-  frontend:
-    container_name: devil-cat_front-end
-    image: ${DOCKER_REGISTRY-}frontend
+  devilcatclient:
+    container_name: devil-cat-client
+    image: ${DOCKER_REGISTRY-}devilcatclient
     ports:
-    - "3000:8081" 
-    - "3001:8080"
-    build:
-      context: .
-      dockerfile: frontend/Dockerfile
+      - "3000:8081"
+      - "3080:8080"
     networks:
       - backend
+    build:
+      context: .
+      dockerfile: DevilCatClient/Dockerfile
     depends_on:
-      - userdata
-      - productdata
-      # - orderdata
-      # - purchasedata
+      - devilcatbackend
 
-  backend:
-    container_name: devil-cat_back-end
-    image: ${DOCKER_REGISTRY-}backend
+  devilcatbackend:
+    container_name: devil-cat-backend
+    image: ${DOCKER_REGISTRY-}devilcatbackend
     ports:
-    - "8000:8081" 
-    - "8001:8080"
-    build:
-      context: .
-      dockerfile: backend/Dockerfile
+      - "8000:8081"
+      - "8080:8080"
     networks:
       - backend
+    build:
+      context: .
+      dockerfile: DevilCatBackend/Dockerfile
     depends_on:
-      - userdata
       - productdata
-      # - orderdata
-      # - purchasedata
 
   pgadmin:
-    container_name: pgadmin_container
+    container_name: postgre-admin
     image: dpage/pgadmin4
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@stiktify.store}
@@ -59,22 +53,8 @@ services:
       - backend
     restart: unless-stopped
 
-  userdata:
-    container_name: user_db
-    image: postgres
-    ports:
-      - "5432:5432"
-    networks:
-      - backend
-    environment:
-      - POSTGRES_DB=userdb
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin@123
-    volumes:
-      - userdb:/var/lib/postgresql/data
-  
   productdata:
-    container_name: product_db
+    container_name: productdb
     image: postgres
     ports:
       - "5433:5432"
@@ -85,4 +65,5 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin@123
     volumes:
-      - productdb:/var/lib/postgresql/data
+      - productdata:/var/lib/postgresql/data
+
