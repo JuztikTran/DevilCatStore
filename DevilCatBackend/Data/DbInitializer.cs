@@ -4,6 +4,22 @@ namespace DevilCatBackend.Data
 {
     public class DbInitializer
     {
+        public static void InitUser(UserDbContext context, Account data)
+        {
+            if (!context.Accounts.Any())
+            {
+                context.Accounts.Add(data);
+                context.SaveChanges();
+            }
+
+            if (!context.Addresses.Any())
+            {
+                var address = new Address[] { };
+                context.Addresses.AddRange(address);
+                context.SaveChanges();
+            }
+        }
+
         public static void InitProduct(ProductDbContext context)
         {
             if (!context.Categories.Any())
