@@ -7,7 +7,6 @@ namespace DevilCatBackend.Models
     public class BaseModel
     {
         [Key]
-        [DisplayName("_id")]
         public string ID { get; set; } = default!;
 
         [Column(TypeName = "timestamp")]
